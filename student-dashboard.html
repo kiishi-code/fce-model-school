@@ -4,10 +4,53 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Student Dashboard</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="dashboard.css">
 </head>
 <body>
-  <h2>Welcome Student</h2>
-  <p>Here you can view your results and announcements.</p>
+  <div class="sidebar">
+    <h2>Student Panel</h2>
+    <a href="#results">My Results</a>
+    <a href="#attendance">My Attendance</a>
+    <a href="#announcements">Announcements</a>
+  </div>
+
+  <div class="main-content">
+    <section id="results">
+      <h2>My Results</h2>
+      <div id="student-results"></div>
+    </section>
+
+    <section id="attendance">
+      <h2>My Attendance</h2>
+      <div id="student-attendance"></div>
+    </section>
+
+    <section id="announcements">
+      <h2>Announcements</h2>
+      <div id="student-announcements"></div>
+    </section>
+  </div>
+
+  <script src="supabase-client.js"></script>
+  <script>
+    async function loadResults() {
+      const { data } = await supabase.from("results").select("*");
+      document.getElementById("student-results").innerHTML = data.map(r => `<p>${r.student_id} - ${r.subject}: ${r.marks}</p>`).join("");
+    }
+
+    async function loadAttendance() {
+      const { data } = await supabase.from("attendance").select("*");
+      document.getElementById("student-attendance").innerHTML = data.map(a => `<p>${a.student_id}: ${a.status}</p>`).join("");
+    }
+
+    async function loadAnnouncements() {
+      const { data } = await supabase.from("announcements").select("*");
+      document.getElementById("student-announcements").innerHTML = data.map(a => `<p>${a.text}</p>`).join("");
+    }
+
+    loadResults();
+    loadAttendance();
+    loadAnnouncements();
+  </script>
 </body>
 </html>
