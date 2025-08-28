@@ -3,21 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FCE Model Secondary School - Login</title>
-  <link rel="stylesheet" href="styles.css">
+  <title>FCE Model School - Login</title>
+  <link rel="stylesheet" href="dashboard.css">
 </head>
 <body>
   <div class="login-container">
-    <h2>School Portal Login</h2>
-    <form id="loginForm">
-      <input type="email" id="email" placeholder="Email" required />
-      <input type="password" id="password" placeholder="Password" required />
+    <h2>FCE Model Secondary School</h2>
+    <form id="login-form">
+      <input type="email" id="email" placeholder="Email" required>
+      <input type="password" id="password" placeholder="Password" required>
       <button type="submit">Login</button>
     </form>
+    <p id="login-message"></p>
   </div>
-
-  <!-- Load Supabase and scripts -->
-  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
   <script src="supabase-client.js"></script>
   <script src="login.js"></script>
 </body>
