@@ -4,10 +4,77 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Teacher Dashboard</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="dashboard.css">
 </head>
 <body>
-  <h2>Welcome Teacher</h2>
-  <p>Here you can upload results and manage attendance.</p>
+  <div class="sidebar">
+    <h2>Teacher Panel</h2>
+    <a href="#upload-results">Upload Results</a>
+    <a href="#attendance">Mark Attendance</a>
+    <a href="#announcements">View Announcements</a>
+  </div>
+
+  <div class="main-content">
+    <section id="upload-results">
+      <h2>Upload Results</h2>
+      <form id="results-form">
+        <input type="text" id="student_id" placeholder="Student ID" required>
+        <input type="text" id="subject" placeholder="Subject" required>
+        <input type="number" id="marks" placeholder="Marks" required>
+        <button type="submit">Submit</button>
+      </form>
+    </section>
+
+    <section id="attendance">
+      <h2>Mark Attendance</h2>
+      <form id="attendance-form">
+        <input type="text" id="student_id_att" placeholder="Student ID" required>
+        <select id="status">
+          <option value="Present">Present</option>
+          <option value="Absent">Absent</option>
+        </select>
+        <button type="submit">Submit</button>
+      </form>
+    </section>
+
+    <section id="announcements">
+      <h2>Announcements</h2>
+      <div id="teacher-announcements"></div>
+    </section>
+  </div>
+
+  <script src="supabase-client.js"></script>
+  <script>
+    const resultsForm = document.getElementById("results-form");
+    resultsForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      await supabase.from("results").insert([
+        {
+          student_id: document.getElementById("student_id").value,
+          subject: document.getElementById("subject").value,
+          marks: document.getElementById("marks").value,
+        },
+      ]);
+      alert("Result uploaded!");
+    });
+
+    const attendanceForm = document.getElementById("attendance-form");
+    attendanceForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      await supabase.from("attendance").insert([
+        {
+          student_id: document.getElementById("student_id_att").value,
+          status: document.getElementById("status").value,
+        },
+      ]);
+      alert("Attendance recorded!");
+    });
+
+    async function loadAnnouncements() {
+      const { data } = await supabase.from("announcements").select("*");
+      document.getElementById("teacher-announcements").innerHTML = data.map(a => `<p>${a.text}</p>`).join("");
+    }
+    loadAnnouncements();
+  </script>
 </body>
 </html>
