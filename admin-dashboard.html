@@ -4,10 +4,65 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Dashboard</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="dashboard.css">
 </head>
 <body>
-  <h2>Welcome Admin</h2>
-  <p>Here you can manage users and school settings.</p>
+  <div class="sidebar">
+    <h2>Admin Panel</h2>
+    <a href="#manage-users">Manage Users</a>
+    <a href="#announcements">Announcements</a>
+  </div>
+
+  <div class="main-content">
+    <section id="manage-users">
+      <h2>Manage Users</h2>
+      <form id="add-user-form">
+        <input type="text" id="full_name" placeholder="Full Name" required>
+        <input type="email" id="user_email" placeholder="Email" required>
+        <input type="password" id="user_password" placeholder="Password" required>
+        <select id="role">
+          <option value="teacher">Teacher</option>
+          <option value="student">Student</option>
+        </select>
+        <button type="submit">Add User</button>
+      </form>
+      <div id="users-list"></div>
+    </section>
+
+    <section id="announcements">
+      <h2>Post Announcement</h2>
+      <form id="announcement-form">
+        <textarea id="announcement-text" placeholder="Write announcement..." required></textarea>
+        <button type="submit">Post</button>
+      </form>
+      <div id="announcement-list"></div>
+    </section>
+  </div>
+
+  <script src="supabase-client.js"></script>
+  <script>
+    const addUserForm = document.getElementById("add-user-form");
+    addUserForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const { error } = await supabase.from("users").insert([
+        {
+          full_name: document.getElementById("full_name").value,
+          email: document.getElementById("user_email").value,
+          password: document.getElementById("user_password").value,
+          role: document.getElementById("role").value,
+        },
+      ]);
+      alert(error ? error.message : "User added!");
+    });
+
+    const announcementForm = document.getElementById("announcement-form");
+    announcementForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const { error } = await supabase.from("announcements").insert([
+        { text: document.getElementById("announcement-text").value },
+      ]);
+      alert(error ? error.message : "Announcement posted!");
+    });
+  </script>
 </body>
 </html>
